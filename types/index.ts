@@ -18,3 +18,13 @@ export type CounryCodeOptionsType = {
 	length: number,
 	format: string,
 }
+
+export type SignUpInputs = {
+	name: string
+	email: string
+	startDate: Date,
+	endDate: Date,
+	password: string,
+	repeatPassword: string,
+}
+

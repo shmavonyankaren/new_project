@@ -269,7 +269,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  /* z-index: 0; */
   padding: 0.25rem;
   margin: 0;
   color: #4A4A4A;
@@ -296,6 +296,7 @@ body {
 /* Phone Input Container */
 .phone-input-container {
   display: flex;
+  width: auto;
   gap: 10px;
   align-items: center;
   justify-content: flex-start;
@@ -380,7 +381,7 @@ body {
   font-size: 16px;
   color: #4A4A4A;
   line-height: 1;
-  transform: translateY(0.08rem);
+  transform: translateY(-0.08rem);
   outline: none;
 }
 
@@ -870,4 +871,4 @@ body {
   }
 }
 
-/* @media screen and (max-width: 650px) {} */
+@media screen and (max-width: 350px) {}

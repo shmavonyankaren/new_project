@@ -1,39 +1,44 @@
 "use client";
 
+import { SingUpInputs } from "@/types";
+import { register } from "module";
 import React, { FocusEvent, useState } from "react";
+import { UseFormRegister } from "react-hook-form";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 
 type InputComponentProps = {
+	register: UseFormRegister<SingUpInputs>
 	id: string;
 	label: string;
-	type: "password" | "email" | "name" | "repeatPassword";
-	name: string;
-	value: string;
-	onChange: (e: FocusEvent<HTMLInputElement>) => void;
-	onBlur: (e: FocusEvent<HTMLInputElement>) => void;
-	error?: string;
-	showError: boolean;
-	placeholder: string;
+	type: "password" | "email" | "name" | "repeatPassword" | "startDate" | "endDate";
+	// name: string;
+	// value: string;
+	// onChange: (e: FocusEvent<HTMLInputElement>) => void;
+	// onBlur: (e: FocusEvent<HTMLInputElement>) => void;
+	// error?: string;
+	// showError: boolean;
+	// placeholder: string;
 	isRequired?: boolean;
-	maxLength?: number;
-	ariaDescribedBy: string;
+	// maxLength?: number;
+	// ariaDescribedBy: string;
 };
 
 const InputComponent = ({
-	id,
-	label,
+	register,
+	// id,
+	// label,
 	type,
-	name,
-	value,
-	onChange,
-	onBlur,
-	error,
-	showError,
-	placeholder,
-	isRequired = false,
-	maxLength = undefined,
-	ariaDescribedBy,
+	// name,
+	// value,
+	// onChange,
+	// onBlur,
+	// error,
+	// showError,
+	// placeholder,
+	// isRequired = false,
+	// maxLength = undefined,
+	// ariaDescribedBy,
 }: InputComponentProps) => {
 	const [isTextVisible, setIsTextVisible] = useState(
 		type === "password" || type === "repeatPassword",
@@ -52,17 +57,18 @@ const InputComponent = ({
 			</label>
 			<div className="input-wrapper">
 				<input
-					id={id}
-					type={inputType}
-					name={name}
-					value={value}
-					onChange={onChange}
-					onBlur={onBlur}
-					placeholder={placeholder}
-					maxLength={maxLength}
-					className={`form-input ${showError ? "error" : ""}`}
-					aria-invalid={showError}
-					aria-describedby={showError ? ariaDescribedBy : undefined}
+					{...register(type)}
+				// id={id}
+				// type={inputType}
+				// name={name}
+				// value={value}
+				// onChange={onChange}
+				// onBlur={onBlur}
+				// placeholder={placeholder}
+				// maxLength={maxLength}
+				// className={`form-input ${showError ? "error" : ""}`}
+				// aria-invalid={showError}
+				// aria-describedby={showError ? ariaDescribedBy : undefined}
 				/>
 				{isPasswordField && (
 					<button
