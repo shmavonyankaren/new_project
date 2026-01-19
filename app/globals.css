@@ -49,7 +49,6 @@ body {
 }
 
 .company-name-title {
-  font-family: BlinkMacSystemFont;
   font-weight: 500;
   font-style: Medium;
   font-size: 54px;
@@ -82,16 +81,15 @@ body {
 
 .auth-form-container {
   display: flex;
+  /* flex: -1; */
   height: full;
-  border-top-left-radius: 50px;
   /* background: linear-gradient(189.03deg, #3243A7 11.34%, rgba(74, 49, 149, 0.95) 54.69%, #8150BE 97.21%),
-    linear-gradient(0deg, #FFFFFF, #FFFFFF); */
+  linear-gradient(0deg, #FFFFFF, #FFFFFF); */
   box-shadow: 0px -9px 34px 0px rgba(90, 23, 224, 0.16);
-  top: 36px;
-  left: 986px;
   background-color: rgba(255, 255, 255, 1);
+  border-top-left-radius: 50px;
   border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
+  /* border-bottom-left-radius: 50px; */
 
   clip-path: polygon(0% 0%,
       100% 0%,
@@ -117,7 +115,7 @@ body {
 }
 
 .form-header-title {
-  font-family: BlinkMacSystemFont;
+  font-family: system-ui, sans-serif;
   font-weight: 500;
   font-style: normal;
   font-size: 32px;
@@ -125,6 +123,15 @@ body {
   letter-spacing: 0%;
   text-transform: uppercase;
   color: rgba(1, 14, 43, 1);
+
+  /* font-family: BlinkMacSystemFont;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-transform: uppercase; */
+
 }
 
 body {
@@ -133,13 +140,13 @@ body {
   background-position: center;
   background-size: cover;
   width: 100%;
-  height: 100dvh;
+  min-height: 100dvh;
   /* background: linear-gradient(180.84deg, rgba(11, 1, 74, 0) 91.38%, #0B014A 99.28%); */
 }
 
 /* Container and Layout */
 .form-container {
-  /* min-height: 100vh; */
+  min-height: 100vh;
   width: 50%;
   display: flex;
   align-items: center;
@@ -201,8 +208,12 @@ body {
 
 /* Form Groups */
 .contact-form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.input-wrapper {
   position: relative;
+  display: block;
 }
 
 .contact-form-group label,
@@ -229,11 +240,10 @@ body {
 
 /* Standard Input Fields */
 .form-input {
-  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 3rem 0.875rem 1rem;
   font-size: 16px;
   line-height: 1.5;
   color: #4A4A4A;
@@ -251,16 +261,23 @@ body {
   position: absolute;
   right: 1rem;
   top: 50%;
-  /* Centers vertically */
+  /* Centers vertically within input-wrapper */
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   z-index: 2;
-  padding: 0;
+  padding: 0.25rem;
   margin: 0;
+  color: #4A4A4A;
+  transition: color 0.2s ease;
+}
+
+.togglePassword:hover {
+  color: #667eea;
 }
 
 .form-input::placeholder {
@@ -398,6 +415,46 @@ body {
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
 }
 
+.generic-button {
+  min-width: 231px;
+  min-height: 67px;
+  border-radius: 16px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  font-family: Mulish;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
+  color: rgba(255, 255, 255, 1);
+  background: linear-gradient(135.54deg, #FEBF44 -16.51%, #D33F3E 94.54%);
+  clip-path: polygon(0% 0%,
+      100% 0%,
+      100% calc(100% - 50px),
+      calc(100% - 40px) 100%,
+      0% 100%);
+
+}
+
+.forgot-password-desc {
+  padding-top: 10px;
+  display: block;
+  width: 100%;
+  font-family: Mulish;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: 0%;
+  color: rgba(100, 116, 139, 1);
+  text-align: start;
+}
+
 @keyframes shake {
 
   0%,
@@ -491,13 +548,25 @@ body {
 }
 
 /* Responsive Design */
+
 @media (max-width: 768px) {
   .form-container {
+    width: 100%;
     padding: 1rem;
+  }
+
+  .form-container-wrapper {
+    margin: 20px;
+  }
+
+  .auth-form-logo-image {
+    width: 105px;
+    height: 45px;
   }
 
   .form-wrapper {
     padding: 2rem 1.5rem;
+    border-radius: 12px;
   }
 
   .form-title {
@@ -506,6 +575,177 @@ body {
 
   .phone-input-container {
     max-width: 100%;
+  }
+
+  /* Auth form adjustments */
+  .auth-form-container {
+    border-radius: 30px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 80px), calc(100% - 80px) 100%, 0% 100%);
+  }
+
+  .form-header-title {
+    font-size: 24px;
+  }
+
+  .auth-form-header-label {
+    font-size: 20px;
+  }
+
+  .company-name-title {
+    font-size: 36px;
+  }
+
+  .frame-list-title {
+    font-size: 20px;
+  }
+
+  .frame-list-description {
+    font-size: 16px;
+    line-height: 28px;
+  }
+
+  .generic-button {
+    min-width: 180px;
+    min-height: 55px;
+    font-size: 18px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0% 100%);
+  }
+
+  /* Input adjustments for mobile */
+  .form-input {
+    font-size: 16px;
+    padding: 0.75rem 2.5rem 0.75rem 0.875rem;
+  }
+
+  .togglePassword {
+    right: 0.75rem;
+  }
+
+  .contact-form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .submit-button {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    background-position: center center;
+    background-attachment: scroll;
+  }
+
+  .form-wrapper {
+    padding: 1.5rem 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+  }
+
+  .form-header-title {
+    font-size: 20px;
+  }
+
+  .company-name-title {
+    font-size: 28px;
+  }
+
+  .frame-list-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .frame-list-description {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .form-label {
+    font-size: 13px;
+  }
+
+  .form-input {
+    font-size: 14px;
+    padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+  }
+
+  .togglePassword {
+    right: 0.5rem;
+  }
+
+  .togglePassword svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .error-message {
+    font-size: 0.75rem;
+  }
+
+  .submit-button {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 36px;
+  }
+
+  .generic-button {
+    min-width: 150px;
+    min-height: 48px;
+    font-size: 16px;
+    padding: 8px 15px;
+  }
+
+  .phone-input-container {
+    padding: 0.625rem 0.75rem;
+    font-size: 14px;
+  }
+
+  .country-code-text {
+    font-size: 14px;
+  }
+
+  .phone-number-input {
+    font-size: 14px;
+  }
+
+  .form-footer-text,
+  .form-footer-link,
+  .back-to-sign-in {
+    font-size: 12px;
+  }
+}
+
+/* Tablet landscape and smaller desktops */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .form-container {
+    width: 60%;
+  }
+
+  .company-name-title {
+    font-size: 42px;
+  }
+
+  .frame-list-title {
+    font-size: 22px;
+  }
+
+  .frame-list-description {
+    font-size: 18px;
+  }
+}
+
+/* Large screens - ensure content doesn't get too stretched */
+@media (min-width: 1920px) {
+  .form-wrapper {
+    max-width: 850px;
+  }
+
+  .form-container {
+    max-width: 960px;
   }
 }
 
@@ -541,29 +781,6 @@ body {
 }
 
 
-.generic-button {
-  width: 231;
-  height: 67;
-  border-radius: 16px;
-
-  font-family: Mulish;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 22px;
-  letter-spacing: 0px;
-  text-align: center;
-  vertical-align: middle;
-  color: rgba(255, 255, 255, 1);
-  background: linear-gradient(135.54deg, #FEBF44 -16.51%, #D33F3E 94.54%);
-  clip-path: polygon(0% 0%,
-      100% 0%,
-      100% calc(100% - 50px),
-      calc(100% - 40px) 100%,
-      0% 100%);
-
-}
-
 .back-to-sign-in {
   font-family: Mulish;
   font-weight: 400;
@@ -574,10 +791,82 @@ body {
   color: rgba(100, 116, 139, 1);
 }
 
-@media screen and (max-width: 650px) {
-  .auth-background {
-    display: none;
-    padding-top: 0px;
-    padding-left: 0px;
+@media screen and (max-width: 1145px) {
+  .auth-footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px
   }
 }
+
+
+@media screen and (max-width: 1430px) {
+  /* .auth-footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+  } */
+
+  .auth-layout-container {
+    flex-direction: column;
+    margin-bottom: 50px;
+  }
+
+  .auth-background {
+    width: 100% !important;
+  }
+
+  .frame-list {
+    width: 100% !important;
+    gap: 50px
+  }
+
+  .left-part {
+    width: 90%;
+
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .auth-background {
+    display: none;
+  }
+
+  .auth-form-header-label {
+    font-size: 18px;
+    width: auto;
+    /* padding-left: 10px; */
+  }
+
+  .auth-header-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .reset-footer {
+    flex-direction: column;
+    gap: 15px
+  }
+}
+
+@media screen and (max-width: 410px) {
+  .auth-form-header-label {
+    font-size: 14px;
+    width: auto;
+    /* padding-left: 10px; */
+  }
+
+  .form-footer-text {
+    font-size: 10px
+  }
+}
+
+/* @media screen and (max-width: 650px) {} */

@@ -22,14 +22,17 @@ const countryCodeOptions = [
   },
 ];
 
-const validatePhoneNumber = (value: string, selectedCountryCode: string): string | undefined => {
+const validatePhoneNumber = (
+  value: string,
+  selectedCountryCode: string,
+): string | undefined => {
   if (!value.trim()) {
     return "Phone number is required";
   }
 
   const digitsOnly = value.replace(/\D/g, "");
   const country = countryCodeOptions.find(
-    (opt) => opt.code === selectedCountryCode
+    (opt) => opt.code === selectedCountryCode,
   );
 
   if (!country) {
@@ -44,12 +47,20 @@ const validatePhoneNumber = (value: string, selectedCountryCode: string): string
     return `Phone number must be exactly ${country.length} digits for ${country.label}`;
   }
 
-
   return undefined;
 };
 
-const createValidationRules = (selectedCountryCode: string | undefined) => {
-  const rules: { name: (value: string) => string | undefined, password: (value: string) => string | undefined, email: (value: string) => string | undefined, phoneNumber?: (value: string) => string | undefined, reapetPassword?: (value: string) => boolean } = {
+const createValidationRules = (
+  selectedCountryCode: string | undefined,
+  passwordValue?: string,
+) => {
+  const rules: {
+    name: (value: string) => string | undefined;
+    password: (value: string) => string | undefined;
+    email: (value: string) => string | undefined;
+    phoneNumber?: (value: string) => string | undefined;
+    repeatPassword?: (value: string) => string | undefined;
+  } = {
     name: (value: string): string | undefined => {
       if (!value.trim()) {
         return "Name is required";
@@ -94,7 +105,7 @@ const createValidationRules = (selectedCountryCode: string | undefined) => {
       }
 
       // Check for at least one special character
-      if (!/[!@#$%^&*()_+=\-[\]{};':"\\|,. <>/? ~`]/.test(trimmedValue)) {
+      if (!/[!@#$%^&*()_+=\-[\]{};':"\\|,.<>/? ~`]/.test(trimmedValue)) {
         return "Password must contain at least one special character (! @#$%^&* etc.)";
       }
 
@@ -124,20 +135,21 @@ const createValidationRules = (selectedCountryCode: string | undefined) => {
       }
 
       // Additional validation:  check for valid characters
-      const strictEmailRegex = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const strictEmailRegex =
+        /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
       if (!strictEmailRegex.test(trimmedValue)) {
         return "Email contains invalid characters";
       }
 
       // Check for consecutive dots
-      if (/\. \./.test(trimmedValue)) {
+      if (/\.\. /.test(trimmedValue)) {
         return "Email cannot contain consecutive dots";
       }
 
       // Check if email starts or ends with dot
       const [localPart] = trimmedValue.split("@");
-      if (localPart.startsWith(".") || localPart.endsWith(". ")) {
+      if (localPart.startsWith(".") || localPart.endsWith(".")) {
         return "Email cannot start or end with a dot";
       }
 
@@ -151,11 +163,22 @@ const createValidationRules = (selectedCountryCode: string | undefined) => {
     };
   }
 
+  // Add repeat password validation if password value is provided
+  if (passwordValue !== undefined) {
+    rules.repeatPassword = (value: string): string | undefined => {
+      if (!value.trim()) {
+        return "Please confirm your password";
+      }
 
+      if (value !== passwordValue) {
+        return "Passwords do not match";
+      }
+
+      return undefined;
+    };
+  }
 
   return rules;
-}
-
-
+};
 
 export { countryCodeOptions, createValidationRules, validatePhoneNumber };

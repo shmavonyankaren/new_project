@@ -2,10 +2,11 @@
 
 import InputComponent from "./InputComponent";
 import useFormValidation from "../hooks/useFormValidation"
-import { countryCodeOptions, createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '@/utils/validationRules';
 import { useCallback } from "react";
 import AuthFooter from "./AuthFooter";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function ForgotPasswordForm() {
 	const validationRules = createValidationRules(undefined);
@@ -33,6 +34,8 @@ export default function ForgotPasswordForm() {
 		console.log('Form submitted successfully:', submissionData);
 		alert('Form submitted successfully! Check console for data.');
 		resetForm();
+
+		redirect("/reset")
 	}, [resetForm]);
 
 
@@ -47,8 +50,9 @@ export default function ForgotPasswordForm() {
 	const isDisabled = checkButton(shouldShowError, formData);
 
 	return (
-		<div className="flex flex-col mt20 justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
+		<div className="form-container-wrapper flex flex-col mt20 justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
 			<h2 className="form-header-title w-full">Forgot Password</h2>
+			<p className="forgot-password-desc">Enter your email address to receive a password reset link.</p>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
 				<div>
 					<InputComponent
@@ -67,11 +71,11 @@ export default function ForgotPasswordForm() {
 					/>
 					<div className="flex w-full justify-end items-center">
 
-						<Link href="/sing-up" className="form-footer-text text-orange-400">Create an account ?</Link>
+						<Link href="/sign-up" className="form-footer-text text-orange-400">Create an account ?</Link>
 
 					</div>
 				</div>
-				<AuthFooter buttonText={"Send me a reset link"} link="/sing-up" linkDesc="Don't have an account ?" text="Sing Up" isDisabled={isDisabled} />
+				<AuthFooter buttonText={"Send me a reset link"} link="/sign-up" linkDesc="Don't have an account ?" text="Sign Up" isDisabled={isDisabled} />
 
 			</form>
 		</div>

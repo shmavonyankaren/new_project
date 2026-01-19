@@ -3,15 +3,39 @@
 import InputComponent from "./InputComponent";
 import useFormValidation from "../hooks/useFormValidation"
 import { createValidationRules } from '@/utils/validationRules';
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import AuthFooter from "./AuthFooter";
 import Link from "next/link";
 import GenericButton from "./GenericButton";
 import { HiArrowLongLeft } from "react-icons/hi2";
+import { redirect } from "next/navigation";
 
 export default function ResetPasswordForm() {
-	const validationRules = createValidationRules(undefined);
+	const passwordRef = React.useRef<string>("");
 
+
+	const initialValidationRules = createValidationRules(undefined);
+	const validationRules = React.useMemo(() => {
+		const rules = createValidationRules(undefined);
+
+		return {
+			...initialValidationRules,
+			password: (value: string): string | undefined => {
+				passwordRef.current = value; // Update ref whenever password is validated
+				return rules.password(value);
+			},
+			repeatPassword: (value: string): string | undefined => {
+				if (!value.trim()) {
+					return "Please confirm your password";
+				}
+				// Use the ref to get the current password value
+				if (value !== passwordRef.current) {
+					return "Passwords do not match";
+				}
+				return undefined;
+			},
+		} as Record<string, (value: string) => string | undefined>;
+	}, [initialValidationRules]);
 	const {
 		formData,
 		errors,
@@ -23,6 +47,7 @@ export default function ResetPasswordForm() {
 	} = useFormValidation(
 		{
 			password: '',
+			repeatPassword: ""
 		},
 		validationRules
 	);
@@ -35,6 +60,8 @@ export default function ResetPasswordForm() {
 		console.log('Form submitted successfully:', submissionData);
 		alert('Form submitted successfully! Check console for data.');
 		resetForm();
+
+		redirect("/sign-in");
 	}, [resetForm]);
 
 
@@ -49,7 +76,7 @@ export default function ResetPasswordForm() {
 	const isDisabled = checkButton(shouldShowError, formData);
 
 	return (
-		<div className="flex flex-col mt20 justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
+		<div className="form-container-wrapper flex flex-col justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
 			<h2 className="form-header-title w-full">Reset Password</h2>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
 				<div>
@@ -68,23 +95,24 @@ export default function ResetPasswordForm() {
 						ariaDescribedBy="name-error"
 					/>
 					<InputComponent
-						id="password"
-						type="password"
-						label="Reapet New Password"
-						name="password"
-						value={formData.password}
+						id="repeatPassword"
+						label="Confirm Password"
+						type="repeatPassword"
+						name="repeatPassword"
+						value={formData.repeatPassword}
 						onChange={handleChange}
 						onBlur={handleBlur}
-						error={errors.password}
-						showError={shouldShowError('password')}
-						placeholder="Re-enter your new Password"
+						error={errors.repeatPassword}
+						showError={shouldShowError("repeatPassword")}
+						placeholder="Re-enter your password"
 						isRequired={true}
-						ariaDescribedBy="name-error"
+						maxLength={128}
+						ariaDescribedBy="repeatPassword-error"
 					/>
 				</div>
-				<div className="pb-20  flex justify-between w-full">
-					<div className="">
-						<Link href="/sing-in" className="back-to-sign-in flex items-center justify-center"><HiArrowLongLeft color="black" size={40} height={100} width={50} />
+				<div className="reset-footer pb-5 md:pb-20 flex justify-between w-full ">
+					<div className="flex justify-start items-center">
+						<Link href="/sign-in" className="back-to-sign-in text-center flex items-center justify-center"><HiArrowLongLeft color="black" size={40} height={100} width={50} />
 							Back to login</Link>
 					</div>
 					<GenericButton text="Change the Password" isDisabled={isDisabled} />

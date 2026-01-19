@@ -3,19 +3,45 @@
 import InputComponent from "./InputComponent";
 import useFormValidation from "../hooks/useFormValidation"
 import { countryCodeOptions, createValidationRules } from '@/utils/validationRules';
-import { ChangeEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import AuthFooter from "./AuthFooter";
-import Link from "next/link";
 import PhoneInput from "./PhoneInput";
 
-export default function SingUpForm() {
+export default function SignUpForm() {
 	const [selectedCountryCode, setSelectedCountryCode] = useState('+374');
+	const passwordRef = React.useRef<string>("");
 
-	const validationRules = createValidationRules(selectedCountryCode);
+
+	const initialValidationRules = createValidationRules(selectedCountryCode);
+	const validationRules = React.useMemo(() => {
+		const rules = createValidationRules(undefined);
+
+		return {
+			...initialValidationRules,
+			password: (value: string): string | undefined => {
+				passwordRef.current = value; // Update ref whenever password is validated
+				return rules.password(value);
+			},
+			repeatPassword: (value: string): string | undefined => {
+				if (!value.trim()) {
+					return "Please confirm your password";
+				}
+				// Use the ref to get the current password value
+				if (value !== passwordRef.current) {
+					return "Passwords do not match";
+				}
+				return undefined;
+			},
+		} as Record<string, (value: string) => string | undefined>;
+	}, [initialValidationRules]);
+
+
 	const handleCountryCodeChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
 		const newCode = e.target.value;
 		setSelectedCountryCode(newCode);
 	}, []);
+
+
 	const {
 		formData,
 		errors,
@@ -29,7 +55,8 @@ export default function SingUpForm() {
 			name: "",
 			email: '',
 			password: '',
-			phoneNumber: ""
+			phoneNumber: "",
+			repeatPassword: ""
 		},
 		validationRules
 	);
@@ -56,23 +83,24 @@ export default function SingUpForm() {
 	const isDisabled = checkButton(shouldShowError, formData);
 
 	return (
-		<div className="flex flex-col mt20 justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
-			<h2 className="form-header-title w-full">Sing Up</h2>
+		<div className="form-container-wrapper flex flex-col mt20 justify-center items-center mt-10 mr-30 ml-30  flex-1 h-full">
+			<h2 className="form-header-title w-full">Sign Up</h2>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
-				<div><InputComponent
-					id="name"
-					type="name"
-					label="Full Name"
-					name="name"
-					value={formData.name}
-					onChange={handleChange}
-					onBlur={handleBlur}
-					error={errors.name}
-					showError={shouldShowError('name')}
-					placeholder="Full Name"
-					isRequired={true}
-					ariaDescribedBy="name-error"
-				/>
+				<div>
+					<InputComponent
+						id="name"
+						type="name"
+						label="Full Name"
+						name="name"
+						value={formData.name}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						error={errors.name}
+						showError={shouldShowError('name')}
+						placeholder="Full Name"
+						isRequired={true}
+						ariaDescribedBy="name-error"
+					/>
 
 					<InputComponent
 						id="email"
@@ -113,8 +141,24 @@ export default function SingUpForm() {
 						isRequired={true}
 						ariaDescribedBy="name-error" />
 
+					<InputComponent
+						id="repeatPassword"
+						label="Confirm Password"
+						type="repeatPassword"
+						name="repeatPassword"
+						value={formData.repeatPassword}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						error={errors.repeatPassword}
+						showError={shouldShowError("repeatPassword")}
+						placeholder="Re-enter your password"
+						isRequired={true}
+						maxLength={128}
+						ariaDescribedBy="repeatPassword-error"
+					/>
+
 				</div>
-				<AuthFooter buttonText={"Sing Up"} link="/sing-in" linkDesc="Already have an account ?" text="Sing In" isDisabled={isDisabled} />
+				<AuthFooter buttonText={"Sign Up"} link="/sign-in" linkDesc="Already have an account ?" text="Sign In" isDisabled={isDisabled} />
 
 			</form>
 		</div>

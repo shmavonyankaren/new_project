@@ -50,8 +50,8 @@ export default function SignInForm() {
 	const isDisabled = checkButton(shouldShowError, formData);
 
 	return (
-		<div className="flex flex-col mt20 justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
-			<h2 className="form-header-title w-full">Sing In</h2>
+		<div className="form-container-wrapper flex flex-col justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
+			<h2 className="form-header-title w-full">Sign In</h2>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
 				<div>
 					<InputComponent
@@ -81,15 +81,15 @@ export default function SignInForm() {
 						placeholder="Password"
 						isRequired={true}
 						ariaDescribedBy="name-error" />
-					<div className="flex w-full justify-between">
-						<div className="flex gap-2">
+					<div className="flex w-full justify-between items-center">
+						<div className="flex gap-2 justify-center items-center">
 							<input
 								className="cursor-pointer form-footer-text"
 								id="remember-me"
 								type="checkbox"
 								placeholder="Remember Me"
 							/>
-							<label htmlFor="remember-me" className="cursor-pointer">Remember Me</label>
+							<label htmlFor="remember-me" className="form-footer-text cursor-pointer">Remember Me</label>
 
 						</div>
 
@@ -97,7 +97,7 @@ export default function SignInForm() {
 
 					</div>
 				</div>
-				<AuthFooter buttonText={"Sing In"} link="/sing-up" linkDesc="Don't have an account ?" text="Sing Up" isDisabled={isDisabled} />
+				<AuthFooter buttonText={"Sign In"} link="/sign-up" linkDesc="Don't have an account ?" text="Sign Up" isDisabled={isDisabled} />
 
 			</form>
 		</div>

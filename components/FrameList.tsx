@@ -7,7 +7,7 @@ type FrameListProps = {
 
 export default function FrameList({ items }: FrameListProps) {
 	return (
-		<div className="grid grid-cols-2 gap-6 gap-y-8 h-full">
+		<div className="frame-list grid grid-cols-2 gap-2 gap-y-2 h-full">
 			{items.map(item => (
 				<FrameListItem item={item} key={item.id} />
 			))}
