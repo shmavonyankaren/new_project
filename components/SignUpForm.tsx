@@ -1,160 +1,103 @@
 "use client"
 
-import InputComponent from "./InputComponent";
-import useFormValidation from "../hooks/useFormValidation"
-import { countryCodeOptions, createValidationRules } from '@/utils/validationRules';
-import React, { ChangeEvent, useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import InputComponentRHF from "./InputComponentRHF";
+import { SignUpFormData, countryCodeOptions, createSignUpSchema } from '@/utils/validationSchemas';
+import { useState, useMemo } from "react";
 import AuthFooter from "./AuthFooter";
-import PhoneInput from "./PhoneInput";
+import PhoneInputRHF from "./PhoneInputRHF";
 
 export default function SignUpForm() {
 	const [selectedCountryCode, setSelectedCountryCode] = useState('+374');
-	const passwordRef = React.useRef<string>("");
 
-
-	const initialValidationRules = createValidationRules(selectedCountryCode);
-	const validationRules = React.useMemo(() => {
-		const rules = createValidationRules(undefined);
-
-		return {
-			...initialValidationRules,
-			password: (value: string): string | undefined => {
-				passwordRef.current = value; // Update ref whenever password is validated
-				return rules.password(value);
-			},
-			repeatPassword: (value: string): string | undefined => {
-				if (!value.trim()) {
-					return "Please confirm your password";
-				}
-				// Use the ref to get the current password value
-				if (value !== passwordRef.current) {
-					return "Passwords do not match";
-				}
-				return undefined;
-			},
-		} as Record<string, (value: string) => string | undefined>;
-	}, [initialValidationRules]);
-
-
-	const handleCountryCodeChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-		const newCode = e.target.value;
-		setSelectedCountryCode(newCode);
-	}, []);
-
+	// Create dynamic schema with phone validation based on country code
+	const dynamicSchema = useMemo(() => {
+		return createSignUpSchema(selectedCountryCode);
+	}, [selectedCountryCode]);
 
 	const {
-		formData,
-		errors,
-		handleChange,
-		handleBlur,
+		register,
 		handleSubmit,
-		resetForm,
-		shouldShowError,
-	} = useFormValidation(
-		{
+		reset,
+		control,
+		formState: { errors, isValid, isDirty },
+	} = useForm<SignUpFormData>({
+		resolver: zodResolver(dynamicSchema),
+		mode: "onChange",
+		defaultValues: {
 			name: "",
 			email: '',
 			password: '',
 			phoneNumber: "",
 			repeatPassword: ""
 		},
-		validationRules
-	);
+	});
 
 	// Handle form submission
-	const onSubmit = useCallback((data: typeof formData) => {
-		const submissionData = {
-			...data,
-		};
-		console.log('Form submitted successfully:', submissionData);
+	const onSubmit = (data: SignUpFormData) => {
+		console.log('Form submitted successfully:', data);
 		alert('Form submitted successfully! Check console for data.');
-		resetForm();
-	}, [resetForm]);
+		reset();
+	};
 
-
-	const checkButton = (shouldShowError: (name: "password" | "email") => boolean, data: typeof formData) => {
-		if (!data.email.length || !data.password.length) return true;
-
-		return shouldShowError('password') || shouldShowError('email');
-
-	}
-
-
-	const isDisabled = checkButton(shouldShowError, formData);
+	const isDisabled = !isValid || !isDirty;
 
 	return (
 		<div className="form-container-wrapper flex flex-col mt20 justify-center items-center mt-10 mr-30 ml-30  flex-1 h-full">
 			<h2 className="form-header-title w-full">Sign Up</h2>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
 				<div>
-					<InputComponent
+					<InputComponentRHF
 						id="name"
 						type="name"
 						label="Full Name"
 						name="name"
-						value={formData.name}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.name}
-						showError={shouldShowError('name')}
 						placeholder="Full Name"
 						isRequired={true}
-						ariaDescribedBy="name-error"
+						error={errors.name}
+						register={register}
 					/>
 
-					<InputComponent
+					<InputComponentRHF
 						id="email"
 						type="email"
 						label="Email Address"
 						name="email"
-						value={formData.email}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.email}
-						showError={shouldShowError('email')}
 						placeholder="Email Address"
 						isRequired={true}
-						ariaDescribedBy="name-error"
+						error={errors.email}
+						register={register}
 					/>
-					<PhoneInput
+					<PhoneInputRHF
+						control={control}
+						name="phoneNumber"
 						selectedCountryCode={selectedCountryCode}
-						onCountryCodeChange={handleCountryCodeChange}
-						value={formData.phoneNumber}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						showError={shouldShowError("phoneNumber")}
-						error={errors.phoneNumber}
+						onCountryCodeChange={setSelectedCountryCode}
 						countryCodeOptions={countryCodeOptions}
-						ariaDescribedBy="phoneNumber-error"
+						error={errors.phoneNumber}
 					/>
-					<InputComponent
+					<InputComponentRHF
 						id="password"
 						type="password"
 						label="Password"
 						name="password"
-						value={formData.password}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.password}
-						showError={shouldShowError('password')}
 						placeholder="Password"
 						isRequired={true}
-						ariaDescribedBy="name-error" />
+						error={errors.password}
+						register={register}
+					/>
 
-					<InputComponent
+					<InputComponentRHF
 						id="repeatPassword"
 						label="Confirm Password"
 						type="repeatPassword"
 						name="repeatPassword"
-						value={formData.repeatPassword}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.repeatPassword}
-						showError={shouldShowError("repeatPassword")}
 						placeholder="Re-enter your password"
 						isRequired={true}
 						maxLength={128}
-						ariaDescribedBy="repeatPassword-error"
+						error={errors.repeatPassword}
+						register={register}
 					/>
 
 				</div>

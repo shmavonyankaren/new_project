@@ -1,86 +1,61 @@
 "use client"
 
-import InputComponent from "./InputComponent";
-import useFormValidation from "../hooks/useFormValidation"
-import { createValidationRules } from '@/utils/validationRules';
-import { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import InputComponentRHF from "./InputComponentRHF";
+import { signInSchema, SignInFormData } from '@/utils/validationSchemas';
 import AuthFooter from "./AuthFooter";
 import Link from "next/link";
 
 export default function SignInForm() {
-	const selectedCountryCode = '+374';
-
-	const validationRules = createValidationRules(selectedCountryCode);
-
 	const {
-		formData,
-		errors,
-		handleChange,
-		handleBlur,
+		register,
 		handleSubmit,
-		resetForm,
-		shouldShowError,
-	} = useFormValidation(
-		{
+		reset,
+		formState: { errors, isValid, isDirty },
+	} = useForm<SignInFormData>({
+		resolver: zodResolver(signInSchema),
+		mode: "onChange",
+		defaultValues: {
 			email: '',
 			password: '',
 		},
-		validationRules
-	);
+	});
 
 	// Handle form submission
-	const onSubmit = useCallback((data: typeof formData) => {
-		const submissionData = {
-			...data,
-		};
-		console.log('Form submitted successfully:', submissionData);
+	const onSubmit = (data: SignInFormData) => {
+		console.log('Form submitted successfully:', data);
 		alert('Form submitted successfully! Check console for data.');
-		resetForm();
-	}, [resetForm]);
+		reset();
+	};
 
-
-	const checkButton = (shouldShowError: (name: "password" | "email") => boolean, data: typeof formData) => {
-		if (!data.email.length || !data.password.length) return true;
-
-		return shouldShowError('password') || shouldShowError('email');
-
-	}
-
-
-	const isDisabled = checkButton(shouldShowError, formData);
+	const isDisabled = !isValid || !isDirty;
 
 	return (
 		<div className="form-container-wrapper flex flex-col justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
 			<h2 className="form-header-title w-full">Sign In</h2>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
 				<div>
-					<InputComponent
+					<InputComponentRHF
 						id="email"
 						type="email"
 						label="Email Address"
 						name="email"
-						value={formData.email}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.email}
-						showError={shouldShowError('email')}
 						placeholder="Email Address"
 						isRequired={true}
-						ariaDescribedBy="name-error"
+						error={errors.email}
+						register={register}
 					/>
-					<InputComponent
+					<InputComponentRHF
 						id="password"
 						type="password"
 						label="Password"
 						name="password"
-						value={formData.password}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.password}
-						showError={shouldShowError('password')}
 						placeholder="Password"
 						isRequired={true}
-						ariaDescribedBy="name-error" />
+						error={errors.password}
+						register={register}
+					/>
 					<div className="flex w-full justify-between items-center">
 						<div className="flex gap-2 justify-center items-center">
 							<input

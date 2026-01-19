@@ -1,53 +1,36 @@
 "use client"
 
-import InputComponent from "./InputComponent";
-import useFormValidation from "../hooks/useFormValidation"
-import { createValidationRules } from '@/utils/validationRules';
-import { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import InputComponentRHF from "./InputComponentRHF";
+import { forgotPasswordSchema, ForgotPasswordFormData } from '@/utils/validationSchemas';
 import AuthFooter from "./AuthFooter";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default function ForgotPasswordForm() {
-	const validationRules = createValidationRules(undefined);
-
 	const {
-		formData,
-		errors,
-		handleChange,
-		handleBlur,
+		register,
 		handleSubmit,
-		resetForm,
-		shouldShowError,
-	} = useFormValidation(
-		{
+		reset,
+		formState: { errors, isValid, isDirty },
+	} = useForm<ForgotPasswordFormData>({
+		resolver: zodResolver(forgotPasswordSchema),
+		mode: "onChange",
+		defaultValues: {
 			email: '',
 		},
-		validationRules
-	);
+	});
 
 	// Handle form submission
-	const onSubmit = useCallback((data: typeof formData) => {
-		const submissionData = {
-			...data,
-		};
-		console.log('Form submitted successfully:', submissionData);
+	const onSubmit = (data: ForgotPasswordFormData) => {
+		console.log('Form submitted successfully:', data);
 		alert('Form submitted successfully! Check console for data.');
-		resetForm();
-
+		reset();
 		redirect("/reset")
-	}, [resetForm]);
+	};
 
-
-	const checkButton = (shouldShowError: (name: "email") => boolean, data: typeof formData) => {
-		if (!data.email.length) return true;
-
-		return shouldShowError('email');
-
-	}
-
-
-	const isDisabled = checkButton(shouldShowError, formData);
+	const isDisabled = !isValid || !isDirty;
 
 	return (
 		<div className="form-container-wrapper flex flex-col mt20 justify-center items-center mt-20 mr-30 ml-30  flex-1 h-full">
@@ -55,19 +38,15 @@ export default function ForgotPasswordForm() {
 			<p className="forgot-password-desc">Enter your email address to receive a password reset link.</p>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col w-full mt-5 justify-between  flex-1 h-full">
 				<div>
-					<InputComponent
+					<InputComponentRHF
 						id="email"
 						type="email"
 						label="Email Address"
 						name="email"
-						value={formData.email}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						error={errors.email}
-						showError={shouldShowError('email')}
 						placeholder="Email Address"
 						isRequired={true}
-						ariaDescribedBy="name-error"
+						error={errors.email}
+						register={register}
 					/>
 					<div className="flex w-full justify-end items-center">
 
