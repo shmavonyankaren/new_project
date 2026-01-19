@@ -579,7 +579,8 @@ body {
 
   /* Auth form adjustments */
   .auth-form-container {
-    border-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
     clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 80px), calc(100% - 80px) 100%, 0% 100%);
   }
 
