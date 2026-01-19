@@ -1,26 +1,5 @@
 import type { Metadata } from "next";
-// Commented out Google Fonts due to network restrictions in build environment
-// import { Mulish, DM_Sans } from 'next/font/google';
 import "./globals.css";
-
-
-// const mulish = Mulish({
-//   subsets: ['latin'],
-//   display: 'swap',
-//   // You can add variable less names for use in CSS if needed:
-//   // variable: '--font-mulish',
-// });
-
-// const dmSans = DM_Sans({
-//   subsets: ["latin"],
-//   display: "swap"
-// })
-
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
