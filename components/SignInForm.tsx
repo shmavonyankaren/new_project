@@ -2,13 +2,13 @@
 
 import InputComponent from "./InputComponent";
 import useFormValidation from "../hooks/useFormValidation"
-import { countryCodeOptions, createValidationRules } from '@/utils/validationRules';
-import { useCallback, useState } from "react";
+import { createValidationRules } from '@/utils/validationRules';
+import { useCallback } from "react";
 import AuthFooter from "./AuthFooter";
 import Link from "next/link";
 
 export default function SignInForm() {
-	const [selectedCountryCode, setSelectedCountryCode] = useState('+374');
+	const selectedCountryCode = '+374';
 
 	const validationRules = createValidationRules(selectedCountryCode);
 

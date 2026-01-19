@@ -4,7 +4,6 @@ import InputComponent from "./InputComponent";
 import useFormValidation from "../hooks/useFormValidation"
 import { createValidationRules } from '@/utils/validationRules';
 import React, { useCallback } from "react";
-import AuthFooter from "./AuthFooter";
 import Link from "next/link";
 import GenericButton from "./GenericButton";
 import { HiArrowLongLeft } from "react-icons/hi2";
