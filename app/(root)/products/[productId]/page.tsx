@@ -1,32 +1,54 @@
+"use client";
+
 import { ProductType } from "@/types";
+import fetchSingleProduct from "@/utils/fetchSingleProduct";
 import Image from "next/image";
+import { use, useEffect, useState } from "react";
 
-export default async function ProductPage({
-	params,
-	item,
+export default function ProductPage({
+  params,
 }: {
-	item: ProductType
-	params: Promise<{ id: string }>;
+  params: Promise<{ productId: number }>;
 }) {
-	const { id } = await params;
+  const [item, setItem] = useState<ProductType | null>(null);
+  const { productId } = use(params);
 
-	return (
-		<div className="container mx-auto my-10">
-			<div className="w-1/2 mx-auto">
-				<div>
-					<h1 className="text-center text-3xl font-bold my-4">{item.picture}</h1>
-				</div>
-				<Image
-					alt={item.name}
-					src={item.picture}
-					className="w-full object-cover aspect-square "
-				/>
+  useEffect(() => {
+    fetchSingleProduct(productId)
+      .then((data) => {
+        setItem(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [productId]);
+  if (!item) {
+    return (
+      <div className="product-page-container">
+        <div className="product-loading">Loading product...</div>
+      </div>
+    );
+  }
 
-				<div className="bg-white py-4">
-					<h3>{item.description}</h3>
-					<h3>{item.price}</h3>
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div className="product-page-container">
+      <div className="product-page-content">
+        <div className="product-image-section">
+          <Image
+            alt={item.name}
+            src={item.picture}
+            width={600}
+            height={600}
+            className="product-page-image"
+          />
+        </div>
+        <div className="product-details-section">
+          <h1 className="product-page-title">{item.name}</h1>
+          <p className="product-page-description">{item.description}</p>
+          <div className="product-page-price">${item.price}</div>
+          <button className="product-page-button">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  );
 }

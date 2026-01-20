@@ -19,13 +19,12 @@ export type CounryCodeOptionsType = {
 };
 
 export type ProductType = {
-  id: number,
-  name: string,
-  description: string,
-  picture: string,
-  price: string
-}
-
+  id: number;
+  name: string;
+  description: string;
+  picture: string;
+  price: string;
+};
 
 export type SignUpInputs = {
   name: string;
@@ -35,7 +34,7 @@ export type SignUpInputs = {
   endDate: Date;
   password: string;
   repeatPassword: string;
-  terms: boolean
+  terms: boolean;
 };
 
 export type SignInInputs = {
@@ -50,4 +49,19 @@ export type ForgotPasswordInputs = {
 export type ResetPasswordInputs = {
   password: string;
   repeatPassword: string;
+};
+
+export type PaginatedProductsType = {
+  current_page: number;
+  data: ProductType[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
 };

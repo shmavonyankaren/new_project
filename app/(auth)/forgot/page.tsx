@@ -1,9 +1,9 @@
-import ForgotPasswordForm from "@/components/ForgotPasswordForm";
+import ForgotPasswordForm from "@/components/forgotPassword/ForgotPasswordForm";
 
 export default function ForgotPassword() {
-	return (
-		<div className="flex flex-col flex-1 h-full">
-			<ForgotPasswordForm />
-		</div >
-	)
+  return (
+    <div className="flex flex-col flex-1 h-full">
+      <ForgotPasswordForm />
+    </div>
+  );
 }

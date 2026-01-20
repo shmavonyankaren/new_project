@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ForgotPasswordSchema } from "@/utils/validationRules";
 import { ForgotPasswordInputs } from "@/types";
-import InputComponent from "./InputComponent";
-import AuthFooter from "./AuthFooter";
+import InputComponent from "../InputComponent";
+import AuthFooter from "../AuthFooter";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
