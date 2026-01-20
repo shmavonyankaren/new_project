@@ -4,11 +4,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignInSchema } from "@/utils/validationRules";
 import { SignInInputs } from "@/types";
-import InputComponent from "./InputComponent";
-import AuthFooter from "./AuthFooter";
+import InputComponent from "../InputComponent";
+import AuthFooter from "../AuthFooter";
 import Link from "next/link";
+import loginUser from "@/utils/loginUser";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
+
+  const router = useRouter();
+
   const {
     handleSubmit,
     control,
@@ -25,9 +30,12 @@ export default function SignInForm() {
     },
   });
 
-  const onSubmit = (data: SignInInputs) => {
-    console.log("Form submitted successfully:", data);
-    alert("Form submitted successfully! Check console for data.");
+  const onSubmit = async (data: SignInInputs) => {
+    const res = await loginUser(data)
+
+    if (res.success) {
+      router.push("/")
+    }
   };
 
   return (

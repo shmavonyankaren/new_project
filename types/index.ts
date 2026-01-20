@@ -18,14 +18,24 @@ export type CounryCodeOptionsType = {
   format: string;
 };
 
+export type ProductType = {
+  id: number,
+  name: string,
+  description: string,
+  picture: string,
+  price: string
+}
+
+
 export type SignUpInputs = {
   name: string;
   email: string;
-  phoneNumber: string;
+  // phoneNumber: string;
   startDate: Date;
   endDate: Date;
   password: string;
   repeatPassword: string;
+  terms: boolean
 };
 
 export type SignInInputs = {

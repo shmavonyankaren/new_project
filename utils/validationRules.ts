@@ -33,13 +33,13 @@ export const UserSchema: ZodType<SignUpInputs> = z
       .min(1, "Email is required")
       .email("Please enter a valid email address")
       .toLowerCase(),
-    phoneNumber: z
-      .string()
-      .min(1, "Phone number is required")
-      .refine(
-        validatePhoneNumber,
-        "Please enter a valid phone number in the correct format",
-      ),
+    // phoneNumber: z
+    //   .string()
+    //   .min(1, "Phone number is required")
+    //   .refine(
+    //     validatePhoneNumber,
+    //     "Please enter a valid phone number in the correct format",
+    //   ),
     startDate: z
       .date({ message: "Start date is required" })
       .refine(
@@ -71,6 +71,8 @@ export const UserSchema: ZodType<SignUpInputs> = z
         "Password must contain at least one special character (@$!%*?&)",
       ),
     repeatPassword: z.string().min(1, "Please confirm your password"),
+    terms: z.boolean().refine((val) => val === true, { message: 'You must check this box to continue' })
+
   })
   .refine((data) => data.password === data.repeatPassword, {
     message: "Passwords do not match",

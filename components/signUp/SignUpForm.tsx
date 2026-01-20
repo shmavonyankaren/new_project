@@ -3,15 +3,21 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/utils/validationRules";
-import AuthFooter from "./AuthFooter";
+import AuthFooter from "../AuthFooter";
 import DatePickerComp from "./DatePicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { SignUpInputs } from "@/types";
-import InputComponent from "./InputComponent";
+import InputComponent from "../InputComponent";
+import Link from "next/link";
+import registerUser from "@/utils/registerUser";
+import { useRouter } from "next/navigation";
+
 // import PhoneInput from "./PhoneInput";
 // import { countryCodeOptions } from "@/data";
 
 export default function SignUpForm() {
+  const router = useRouter();
+
   const {
     handleSubmit,
     control,
@@ -25,15 +31,21 @@ export default function SignUpForm() {
     defaultValues: {
       name: "",
       email: "",
-      phoneNumber: "",
+      // phoneNumber: "",
       startDate: undefined,
       endDate: undefined,
       password: "",
       repeatPassword: "",
+      terms: false
     },
   });
+  const onSubmit = async (data: SignUpInputs) => {
+    const res = await registerUser(data);
 
-  const onSubmit = (data: SignUpInputs) => console.log(data);
+    if (res?.status) {
+      router.push("/")
+    }
+  };
 
   return (
     <div className="form-container-wrapper flex flex-col mt20 justify-center items-center mt-10 mr-30 ml-30  flex-1 h-full">
@@ -139,6 +151,39 @@ export default function SignUpForm() {
               maxLength={128}
             />
           </section>
+          <Controller
+            control={control}
+            name="terms"
+            render={({ field, fieldState }) => (
+              <div>
+                <div className="flex justify-start items-center gap-2">
+                  <input
+                    id="checkbox-terms"
+                    type="checkbox"
+                    name={field.name}
+                    checked={field.value as boolean}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    placeholder="Terms"
+                    className={`${fieldState.error ? "error" : ""} cursor-pointer`}
+                    aria-invalid={!!fieldState.error}
+                    aria-describedby={fieldState.error ? `checkbox-error` : undefined}
+                  />
+                  <label htmlFor='checkbox-terms' className="form-label mb-0!">
+                    Agree to {" "}<Link href="#" className="text-orange-500">terms and conditions</Link>
+                  </label>
+
+                </div>
+                {fieldState.error && (
+                  <span id={`checkbox-error`} className="error-message" role="alert">
+                    {fieldState.error.message}
+                  </span>
+                )}
+              </div>
+
+            )}
+          />
         </div>
         <AuthFooter
           buttonText={"Sign Up"}
@@ -147,7 +192,7 @@ export default function SignUpForm() {
           text="Sign In"
           isDisabled={!isValid || isSubmitting}
         />
-      </form>
-    </div>
+      </form >
+    </div >
   );
 }

@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/utils/validationRules";
 import { SignUpInputs } from "@/types";
 import InputComponent from "./InputComponent";
-import DatePickerComp from "./DatePicker";
-import PhoneInput from "./PhoneInput";
+import DatePickerComp from "./signUp/DatePicker";
+import PhoneInput from "./signUp/PhoneInput";
 import { countryCodeOptions } from "@/data";
 
 /**

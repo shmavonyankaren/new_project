@@ -1,5 +1,5 @@
 import FrameList from "./FrameList";
-import LanguageSelection from "./LanguageSelector";
+import LanguageSelection from "./signUp/LanguageSelector";
 import { frameListItems } from "../data"
 export default function AuthenticationBackground() {
 	return (
