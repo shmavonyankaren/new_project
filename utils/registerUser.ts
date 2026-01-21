@@ -1,4 +1,5 @@
 import { SignUpInputs } from "@/types";
+import authFetchAPI from "./authFetchAPI";
 
 
 export default async function registerUser(data: SignUpInputs) {
@@ -15,13 +16,15 @@ export default async function registerUser(data: SignUpInputs) {
 	};
 
 	try {
-		const res = await fetch("/api/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(sendingData),
-		});
+		const res = await (await authFetchAPI()).post("/api/register", sendingData)
+
+		// const res = await fetch("/api/register", {
+		// 	method: "POST",
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify(sendingData),
+		// });
 
 		if (!res.ok) {
 			throw new Error(`HTTP error! status: ${res.status}`);

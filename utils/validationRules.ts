@@ -20,11 +20,10 @@ const validatePhoneNumber = (phoneNumber: string): boolean => {
   );
 };
 
-export const UserSchema: ZodType<SignUpInputs> = z
+export const UserSchema = z
   .object({
     name: z
       .string()
-      .min(1, "Name is required")
       .min(2, "Name must be at least 2 characters")
       .max(50, "Name must be less than 50 characters")
       .regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces"),
@@ -83,28 +82,25 @@ export const UserSchema: ZodType<SignUpInputs> = z
     path: ["endDate"],
   });
 
-export const SignInSchema: ZodType<SignInInputs> = z.object({
+export const SignInSchema = z.object({
   email: z
     .string()
     .min(1, "Email is required")
-    .email("Please enter a valid email address")
-    .toLowerCase(),
+    .email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
-export const ForgotPasswordSchema: ZodType<ForgotPasswordInputs> = z.object({
+export const ForgotPasswordSchema = z.object({
   email: z
     .string()
-    .min(1, "Email is required")
     .email("Please enter a valid email address")
     .toLowerCase(),
 });
 
-export const ResetPasswordSchema: ZodType<ResetPasswordInputs> = z
+export const ResetPasswordSchema = z
   .object({
     password: z
       .string()
-      .min(1, "Password is required")
       .min(8, "Password must be at least 8 characters")
       .max(128, "Password must be less than 128 characters")
       .refine(

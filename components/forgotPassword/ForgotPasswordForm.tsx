@@ -16,9 +16,7 @@ export default function ForgotPasswordForm() {
     control,
     formState: { isValid, isSubmitting },
   } = useForm<ForgotPasswordInputs>({
-    // @ts-expect-error - Zod 4.x compatibility with react-hook-form resolver
-    // eslint-disable-next-line
-    resolver: zodResolver(ForgotPasswordSchema) as any,
+    resolver: zodResolver(ForgotPasswordSchema),
     mode: "all",
     reValidateMode: "onChange",
     defaultValues: {

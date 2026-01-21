@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Mulish, DM_Sans } from 'next/font/google';
 import "./globals.css";
-
+import QueryProvider from "@/components/QueryClientProvider";
+import StoreProvider from "@/components/ReduxProvider"
 
 const mulish = Mulish({
   subsets: ['latin'],
@@ -36,8 +37,14 @@ export default function RootLayout({
       <body
         className={`${mulish.className} ${dmSans.className} antialiased`}
       >
-        {children}
+        <StoreProvider>
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </StoreProvider>
       </body>
+
+
     </html>
   );
 }

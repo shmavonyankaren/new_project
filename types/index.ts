@@ -65,3 +65,10 @@ export type PaginatedProductsType = {
   to: number;
   total: number;
 };
+
+
+type BucketId = {
+  bucketId: number
+}
+
+export type BucketProductType = BucketId & ProductType

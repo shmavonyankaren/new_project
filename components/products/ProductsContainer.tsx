@@ -4,11 +4,14 @@ import fetchPaginatedProducts from "@/utils/fetchPaginatedProducts";
 import ProductList from "./ProductList";
 import { useEffect, useState } from "react";
 import { PaginatedProductsType } from "@/types";
+import { useSearchParams } from "next/navigation";
 
 export default function HomePageContainer() {
   const [paginationData, setPaginationData] =
     useState<PaginatedProductsType | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  console.log('searchParams ->', searchParams)
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,19 +43,19 @@ export default function HomePageContainer() {
   };
 
   return (
-    <div className="bg-white w-full h-full">
+    <div className="bg-transparent w-full h-full flex-1 flex">
       {loading ? (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center flex-1">
           <p>Loading...</p>
         </div>
       ) : paginationData ? (
-        <>
+        <div className="flex flex-1 flex-col justify-between">
           <ProductList list={paginationData.data} />
-          <div className="flex justify-center items-center p-4 space-x-4">
+          <div className="flex justify-center items-center p-4 space-x-4 bg-purple-800">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+              className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded disabled:cursor-c disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               Previous
             </button>
@@ -62,12 +65,12 @@ export default function HomePageContainer() {
             <button
               onClick={handleNextPage}
               disabled={currentPage === paginationData.last_page}
-              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+              className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               Next
             </button>
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex justify-center items-center h-full">
           <p>No data available</p>

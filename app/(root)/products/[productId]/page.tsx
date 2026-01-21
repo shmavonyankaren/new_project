@@ -1,9 +1,11 @@
 "use client";
 
+import { add } from "@/redux/features/bucket/bucketSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { ProductType } from "@/types";
 import fetchSingleProduct from "@/utils/fetchSingleProduct";
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { MouseEvent, use, useEffect, useState } from "react";
 
 export default function ProductPage({
   params,
@@ -11,7 +13,9 @@ export default function ProductPage({
   params: Promise<{ productId: number }>;
 }) {
   const [item, setItem] = useState<ProductType | null>(null);
+
   const { productId } = use(params);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     fetchSingleProduct(productId)
@@ -30,6 +34,12 @@ export default function ProductPage({
     );
   }
 
+  const addProductHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    dispatch(add(item));
+  };
+
   return (
     <div className="product-page-container">
       <div className="product-page-content">
@@ -46,7 +56,7 @@ export default function ProductPage({
           <h1 className="product-page-title">{item.name}</h1>
           <p className="product-page-description">{item.description}</p>
           <div className="product-page-price">${item.price}</div>
-          <button className="product-page-button">Add to Cart</button>
+          <button type="button" onClick={addProductHandler} className="product-page-button">Add to Cart</button>
         </div>
       </div>
     </div>

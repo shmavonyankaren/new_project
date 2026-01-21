@@ -9,19 +9,20 @@ import AuthFooter from "../AuthFooter";
 import Link from "next/link";
 import loginUser from "@/utils/loginUser";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignInForm() {
 
   const router = useRouter();
+
+  const [credentialsError, setCredentialsError] = useState(false);
 
   const {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting },
   } = useForm<SignInInputs>({
-    // @ts-expect-error - Zod 4.x compatibility with react-hook-form resolver
-    // eslint-disable-next-line
-    resolver: zodResolver(SignInSchema) as any,
+    resolver: zodResolver(SignInSchema),
     mode: "all",
     reValidateMode: "onChange",
     defaultValues: {
@@ -31,10 +32,17 @@ export default function SignInForm() {
   });
 
   const onSubmit = async (data: SignInInputs) => {
-    const res = await loginUser(data)
+    try {
+      const res = await loginUser(data)
 
-    if (res.success) {
-      router.push("/")
+      if (res.success) {
+        setCredentialsError(false);
+        router.push("/")
+      }
+      setCredentialsError(true)
+    } catch (err) {
+      setCredentialsError(true)
+      console.log(err)
     }
   };
 
@@ -85,6 +93,12 @@ export default function SignInForm() {
               Forgot Password ?
             </Link>
           </div>
+
+          {credentialsError && (
+            <span id={`credentials-error`} className="error-message" role="alert">
+              These credentials do not match our records.
+            </span>
+          )}
         </div>
         <AuthFooter
           buttonText={"Sign In"}

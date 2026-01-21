@@ -6,11 +6,13 @@ import { UserSchema } from "@/utils/validationRules";
 import AuthFooter from "../AuthFooter";
 import DatePickerComp from "./DatePicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { SignUpInputs } from "@/types";
+// import { SignUpInputs } from "@/types";
 import InputComponent from "../InputComponent";
 import Link from "next/link";
 import registerUser from "@/utils/registerUser";
 import { useRouter } from "next/navigation";
+import z from "zod";
+import { SignUpInputs } from "@/types";
 
 // import PhoneInput from "./PhoneInput";
 // import { countryCodeOptions } from "@/data";
@@ -23,9 +25,7 @@ export default function SignUpForm() {
     control,
     formState: { isValid, isSubmitting },
   } = useForm<SignUpInputs>({
-    // @ts-expect-error - Zod 4.x compatibility with react-hook-form resolver
-    // eslint-disable-next-line
-    resolver: zodResolver(UserSchema) as any,
+    resolver: zodResolver(UserSchema),
     mode: "all",
     reValidateMode: "onChange",
     defaultValues: {

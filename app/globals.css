@@ -1,4 +1,7 @@
 @import "tailwindcss";
+
+
+
 /* 
 :root {
   --background: #ffffff;
@@ -1043,8 +1046,8 @@ body {
 }
 
 .modal-image {
-  width: 100%;
-  height: auto;
+  /* width: 100%; */
+  /* height: auto; */
   border-radius: 12px;
   object-fit: cover;
 }
@@ -1107,7 +1110,7 @@ body {
 }
 
 .modal-wrapper {
-  position: relative;
+  /* position: relative; */
   width: 100%;
   max-width: 720px;
   border-radius: 16px;
@@ -1120,6 +1123,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1202,6 +1206,7 @@ body {
   background: #d80051;
   transform: translateY(-1px);
 }
+
 .product-page-container {
   min-height: 100vh;
   padding: 3rem 2rem;
