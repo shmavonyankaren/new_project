@@ -46,7 +46,7 @@ export default function Bucket() {
 
 		<div className="flex justify-around text-white pt-9 pb-9 mt-5 bg-purple-950">
 			<p>Total Count: {products.length}</p>
-			<p>Total Price: {price}
+			<p>Total Price: {price}$
 
 			</p>
 			<button onClick={deleteAllHandler} className="bg-red-500 rounded-4xl p-3 cursor-pointer">Delete All</button>
